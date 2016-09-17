@@ -10,7 +10,11 @@ public class HomeworkTest {
     }
     
     public static void main(String args[]) {
-	System.out.println(celsiusToFahrenheit(-40));
-	System.out.println(celsiusToFahrenheit(0));
+	System.out.println(celsiusToFahrenheit(-40)); //-40
+	System.out.println(celsiusToFahrenheit(0));   //32
+	System.out.println(celsiusToFahrenheit(20));  //68
+	System.out.println(fahrenheitToCelsius(-40)); //-40
+	System.out.println(fahrenheitToCelsius(50));  //10
+	System.out.println(fahrenheitToCelsius(0));   //-17.78
     }
 }

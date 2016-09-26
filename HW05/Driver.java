@@ -32,11 +32,19 @@ class Student {
 
 public class Driver {
     public static void main(String args[]) {
-	Student s = new Student("Joe", "Shmoe", "29", 2);
+	Student s = new Student("Joe", "Shmoe", "123456789", 2);
 	s.printStudent();
 	s.raiseGPA(1.0);
 	s.printStudent();
 	s.lowerGPA(2.0);
 	s.printStudent();
+	
+	Student a = new Student("Davy", "Jones", "987654321", 2);
+	a.printStudent();
+	a.lowerGPA(0.1);
+	a.printStudent();
+	a.raiseGPA(4.0);
+	a.printStudent();
+	
     }
 }

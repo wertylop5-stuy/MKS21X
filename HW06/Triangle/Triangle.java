@@ -68,13 +68,13 @@ public class Triangle{
 
     //helper function for isRight, assume that ab is the longest side
     private boolean pycheck(Point a, Point b, Point c){
+	
 	return false;
         //Optional but helpful.
     }
 
     //It is suggested that you use pycheck 
-
-    //Return true when the triangle is a right triangle, false otherwise.
+    //Return true when the triangle is a right triangle, false otherwise
     public boolean isRight(){
 	return false;
     }

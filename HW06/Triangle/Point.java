@@ -1,10 +1,19 @@
 public class Point {
     private int x = 0;
     private int y = 0;
+
+    public Point(){}
+    
     // a constructor!
     public Point(int x, int y) {
         setX(x);
         setY(y);
+    }
+
+    //copy constructor
+    public Point(Point toCopy) {
+	x = toCopy.getX();
+	y = toCopy.getY();
     }
 
     // accessor methods

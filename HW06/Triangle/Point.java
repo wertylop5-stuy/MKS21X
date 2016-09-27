@@ -1,11 +1,11 @@
 public class Point {
-    private int x = 0;
-    private int y = 0;
+    private double x = 0;
+    private double y = 0;
 
     public Point(){}
     
     // a constructor!
-    public Point(int x, int y) {
+    public Point(double x, double y) {
         setX(x);
         setY(y);
     }
@@ -17,18 +17,18 @@ public class Point {
     }
 
     // accessor methods
-    public int getX(){
+    public double getX(){
         return x;
     }
-    public int getY(){
+    public double getY(){
         return y;
     }
 
     //mutator methods
-    public void setX(int x){
+    public void setX(double x){
         this.x = x;
     }
-    public void setY(int y){
+    public void setY(double y){
         this.y = y;
     }
     

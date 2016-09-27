@@ -6,14 +6,25 @@ public class Triangle{
     //make copies of the parameters, do not just say v1 = a, etc.
     public Triangle(Point a, Point b, Point c){
         //1. Explain why we want this, and how you will do it.
+	/*We want to make copies because if we don't, people can
+	 access our private variables from outside the class
+	 
+	 I made a copy constructor in the Point class that takes a 
+	 Point pbject as an argument and copies its members to the
+	 new object.
+	 */
 	v1 = new Point(a);
+	v2 = new Point(b);
+	v3 = new Point(c);
     }
 
     
     public Triangle(double x1,double y1,
 		    double x2,double y2,
 		    double x3,double y3) {
-
+	v1 = new Point(x1, y1);
+	v2 = new Point(x2, y2);
+	v3 = new Point(x3, y3);
     }
     
 
@@ -25,25 +36,33 @@ public class Triangle{
     }
 
     public double getPerimeter(){
-	return 0.0;
+	return v1.distance(v2) + v2.distance(v3) + v3.distance(v1);
     }
 
+    //Uses heron's formula
     public double getArea(){
-	return 0.0;
         //2. Explain how to do this with the tools you have in Point/Triangle. 
+	/*
+	 We can use the distance method in the Point class to 
+	 get the side lengths of the Triangle. With this, 
+	 getting the semiperimeter is simple with the getPerimeter
+	 method.
+	 */
+	double s = getPerimeter() / 2.0;
+	return Math.sqrt(s * (s - v1.distance(v2)) *
+			 (s - v2.distance(v3)) *
+			 (s - v3.distance(v1)));
     }
 
     //do not use == to check if doubles are the same, because of rounding errors + irrational numbers.
 
     //Instead write a function to check if values are very close together.  
-
+    //must be within (1/1000)%
     private boolean isCloseEnough(double a,double b){
-
-        //3. Explain how to calculate. 
-
-        //Are 100,000,001 and 100,000,000 close together? they are 1 apart. 
-
-        //Are 1 and 2 close together? they are also 1 apart
+        //3. Explain how to calculate.
+	/*
+	 Divide the larger by the smaller
+	 */
 	return false;
     }
 

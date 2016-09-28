@@ -10,14 +10,13 @@ public class Triangle{
 	 access our private variables from outside the class
 	 
 	 I made a copy constructor in the Point class that takes a 
-	 Point pbject as an argument and copies its members to the
+	 Point object as an argument and copies its members into the
 	 new object.
 	 */
 	v1 = new Point(a);
 	v2 = new Point(b);
 	v3 = new Point(c);
     }
-
     
     public Triangle(double x1,double y1,
 		    double x2,double y2,
@@ -61,22 +60,62 @@ public class Triangle{
     private boolean isCloseEnough(double a,double b){
         //3. Explain how to calculate.
 	/*
-	 Divide the larger by the smaller
+	  Get the absolute value of the diffence of the two values.
+	  Get value of largest # / 1000 (epsilon)
+	  If abs val less than epsilon, true, else false;
 	 */
-	return false;
+	double epsilon;
+	//System.out.println(a + " " + b);
+	if (a > b) epsilon = a / 1000;
+	else epsilon = b / 1000;
+	//System.out.println(epsilon);
+	return Math.abs(a - b) <= epsilon;
     }
 
     //helper function for isRight, assume that ab is the longest side
-    private boolean pycheck(Point a, Point b, Point c){
-	
-	return false;
-        //Optional but helpful.
+    private boolean pyCheck(Point a, Point b, Point c){
+	System.out.println(a + " " + b + " " + c);
+	System.out.println(Math.sqrt( Math.pow(b.distance(c), 2) +
+				      Math.pow(c.distance(a), 2)) + " " + 
+			   a.distance(b));
+	return (isCloseEnough(
+			  Math.sqrt( Math.pow(b.distance(c), 2) +
+				     Math.pow(c.distance(a), 2)),
+			  a.distance(b)));
     }
 
     //It is suggested that you use pycheck 
     //Return true when the triangle is a right triangle, false otherwise
     public boolean isRight(){
-	return false;
+	double ab = v1.distance(v2);
+	double bc = v2.distance(v3);
+	double ca = v3.distance(v1);
+
+	if (ab >= bc) {
+	    System.out.println(1);
+	    if (ab >= ca) return pyCheck(v1, v2, v3);
+	    return pyCheck(v1, v3, v2);
+	}
+	else if (bc >= ca) {
+	    System.out.println(2);
+	    return pyCheck(v2, v3, v1);
+	}
+	System.out.println(3);
+	return pyCheck(v3, v1, v2);
+    }
+
+    public static void main(String args[]) {
+	Triangle t = new Triangle(new Point(0, 0),
+				  new Point(3, 0),
+				  new Point(0, 4));
+	System.out.println("isCloseEnough tests");
+	System.out.println(t.isCloseEnough(1, 2));
+	System.out.println(t.isCloseEnough(1000, 999));
+	System.out.println(t.isCloseEnough(100000, 99999.0002));
+	System.out.println(t.isCloseEnough(0, 0));
+	System.out.println("Testing pyCheck");
+	System.out.println(t);
+	System.out.println(t.pyCheck(t.v1, t.v2, t.v3));
     }
 
 }

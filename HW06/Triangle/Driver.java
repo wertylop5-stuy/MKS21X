@@ -13,5 +13,9 @@ public class Driver {
 	Triangle t = new Triangle(a, b, new Point(0, 5));
 	System.out.println("Perim: " + t.getPerimeter());
 	System.out.println("Area: " + t.getArea());
+	System.out.println("isRight: " + t.isRight());
+	Triangle t2 = new Triangle(new Point(0, 0), new Point(4, 0),
+				   new Point(2, 3));
+	System.out.println("isRight t2: " + t2.isRight());
     }
 }

@@ -127,7 +127,11 @@ public class SuperArray {
 		}
 		return -1;
 	}
-
+    
+    public void trimToSize() {
+	mData = toArray();
+    }
+    
     public void clear() { mSize = 0; }
     
     public boolean isEmpty() { return mSize == 0; }
@@ -135,13 +139,13 @@ public class SuperArray {
     public int get(int index) { return mData[index]; }
 	
     public int size(){ return mSize; }
-
+    
     public static void main(String[] args) {
 		SuperArray s = new SuperArray();
-		for (int x = 0; x < 11; x++) {
+		for (int x = 0; x < 10; x++) {
 			s.add(x);
 		}
-		//System.out.println(s.toStringDebug());
+		System.out.println(s.toStringDebug());
 		s.add(0, 1);
 		int f = s.set(1, 29);
 		f = s.remove(3);

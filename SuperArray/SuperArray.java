@@ -19,6 +19,13 @@ public class SuperArray {
 		mData = new int[10];
 		mSize = 0;
     }
+    
+    public SuperArray(int initCapacity) {
+	if (initCapacity < 0)
+	    throw new IllegalArgumentException("Bad index: " + initCapacity);
+	mData = new int[initCapacity];
+	mSize = 0;
+    }
 
     //index is the spot where the element will be inserted
     private void shiftRight(int index) {
@@ -65,12 +72,17 @@ public class SuperArray {
 	 
     //Add a value at a certain index
     public void add(int index, int n) {
+	//cuz you can add am element to the end, so not >=
+	if (index < 0 || index > size())
+	    throw new IndexOutOfBoundsException(""+index);
 		shiftRight(index);
 		mData[index] = n;
 		mSize++;
     }
 	 
     public int remove(int index) {
+	if (index < 0 || index >= size())
+	    throw new IndexOutOfBoundsException(""+index);
 		int temp = mData[index];
 		shiftLeft(index);
 		mSize--;
@@ -78,6 +90,8 @@ public class SuperArray {
     }
 	 
     public int set(int index, int n) {
+	if (index < 0 || index >= size())
+	    throw new IndexOutOfBoundsException(""+index);
 		int temp = mData[index];
 		mData[index] = n;
 		return temp;
@@ -149,7 +163,11 @@ public class SuperArray {
     
     public boolean isEmpty() { return mSize == 0; }
 	
-    public int get(int index) { return mData[index]; }
+    public int get(int index) {
+	if (index < 0 || index >= size())
+	    throw new IndexOutOfBoundsException("" + index);
+	return mData[index];
+    }
 	
     public int size(){ return mSize; }
 	//public int capacity(){ return mData.length; }
@@ -236,5 +254,27 @@ public class SuperArray {
 		t.add(6);
 		t.add(4);
 		System.out.println(t.toStringDebug());
+		
+		System.out.println("excpetions");
+		SuperArray o;
+		//o = new SuperArray(-1);
+		o = new SuperArray(5);
+		//o.get(-1);
+		o.get(0);
+		//o.get(10);
+		o.add(2);
+		o.add(1);
+		//o.set(-1, 5);
+		//o.set(5, 4);
+		//o.set(9, 0);
+		//o.add(-1, 5);
+		o.add(2, 4);//legal
+		//o.add(6, 0);
+		//o.add(10, 5);
+		//o.remove(-1);
+		//o.remove(3);
+		//o.remove(10);
+		
+		
     }
 }

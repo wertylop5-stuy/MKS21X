@@ -23,8 +23,8 @@ public class SuperArray {
     public SuperArray(int initCapacity) {
 	if (initCapacity < 0)
 	    throw new IllegalArgumentException("Bad index: " + initCapacity);
-	mData = new int[initCapacity];
-	mSize = 0;
+		mData = new int[initCapacity];
+		mSize = 0;
     }
 
     //index is the spot where the element will be inserted
@@ -73,16 +73,16 @@ public class SuperArray {
     //Add a value at a certain index
     public void add(int index, int n) {
 	//cuz you can add am element to the end, so not >=
-	if (index < 0 || index > size())
-	    throw new IndexOutOfBoundsException(""+index);
+		if (index < 0 || index > size())
+			throw new IndexOutOfBoundsException(""+index);
 		shiftRight(index);
 		mData[index] = n;
 		mSize++;
     }
 	 
     public int remove(int index) {
-	if (index < 0 || index >= size())
-	    throw new IndexOutOfBoundsException(""+index);
+		if (index < 0 || index >= size())
+			throw new IndexOutOfBoundsException(""+index);
 		int temp = mData[index];
 		shiftLeft(index);
 		mSize--;
@@ -90,8 +90,8 @@ public class SuperArray {
     }
 	 
     public int set(int index, int n) {
-	if (index < 0 || index >= size())
-	    throw new IndexOutOfBoundsException(""+index);
+		if (index < 0 || index >= size())
+			throw new IndexOutOfBoundsException(""+index);
 		int temp = mData[index];
 		mData[index] = n;
 		return temp;
@@ -164,13 +164,13 @@ public class SuperArray {
     public boolean isEmpty() { return mSize == 0; }
 	
     public int get(int index) {
-	if (index < 0 || index >= size())
-	    throw new IndexOutOfBoundsException("" + index);
-	return mData[index];
+		if (index < 0 || index >= size())
+			throw new IndexOutOfBoundsException("" + index);
+		return mData[index];
     }
 	
     public int size(){ return mSize; }
-	//public int capacity(){ return mData.length; }
+	public int capacity(){ return mData.length; }
     
     public static void main(String[] args) {
 		SuperArray s = new SuperArray();
@@ -208,6 +208,8 @@ public class SuperArray {
 		System.out.println("removing");
 		f = s.remove(0);
 		System.out.println(s.toStringDebug()+" rem "+f);
+		System.out.println(s.size());
+		System.out.println(s.capacity());
 		f = s.remove(s.size() - 1);
 		System.out.println(s.toStringDebug()+" rem "+f);
 		s.remove(4);
@@ -260,7 +262,7 @@ public class SuperArray {
 		//o = new SuperArray(-1);
 		o = new SuperArray(5);
 		//o.get(-1);
-		o.get(0);
+		//o.get(0);
 		//o.get(10);
 		o.add(2);
 		o.add(1);

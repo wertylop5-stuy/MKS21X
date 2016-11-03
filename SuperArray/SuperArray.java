@@ -72,9 +72,12 @@ public class SuperArray {
 	 
     //Add a value at a certain index
     public void add(int index, int n) {
-	//cuz you can add am element to the end, so not >=
+		//cuz you can add am element to the end, so not >=
 		if (index < 0 || index > size())
 			throw new IndexOutOfBoundsException(""+index);
+		if (mSize == mData.length) {
+			grow();
+		}
 		shiftRight(index);
 		mData[index] = n;
 		mSize++;
@@ -124,9 +127,12 @@ public class SuperArray {
 			res += mData[x];
 			if (x != mSize - 1) res += ", ";
 		}
-		if (x == 0) res += "_";
+		if (x == 0) {
+			res += "_";
+			x++;
+		}
 		if (x != mData.length && mData.length > 1) res += ", ";
-		for (x++; x < mData.length; x++) {
+		for (; x < mData.length; x++) {
 			res+= "_";
 			if (x != mData.length - 1) res += ", ";
 		}
@@ -257,7 +263,7 @@ public class SuperArray {
 		t.add(4);
 		System.out.println(t.toStringDebug());
 		
-		System.out.println("excpetions");
+		System.out.println("exceptions");
 		SuperArray o;
 		//o = new SuperArray(-1);
 		o = new SuperArray(5);

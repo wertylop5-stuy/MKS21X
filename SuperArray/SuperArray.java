@@ -11,19 +11,19 @@ TODO
 need to fix toStringDebug
 */
 public class SuperArray {
-    private int[] mData;
+    private String[] mData;
     private int mSize;
 	
     //constructor make an empty superArray should make size 0, but the data capacity 10.
     public SuperArray() {
-		mData = new int[10];
+		mData = new String[10];
 		mSize = 0;
     }
     
     public SuperArray(int initCapacity) {
 	if (initCapacity < 0)
 	    throw new IllegalArgumentException("Bad index: " + initCapacity);
-		mData = new int[initCapacity];
+		mData = new String[initCapacity];
 		mSize = 0;
     }
 
@@ -47,11 +47,11 @@ public class SuperArray {
     //2
     /**Resize the data, by making a new array, then copying over elements, use this as your data.*/
     private void grow(){
-		int[] temp;
+		String[] temp;
 		if (mData.length < 1) {
-			temp = new int[10];
+			temp = new String[10];
 		}
-		else temp = new int[mData.length*2];
+		else temp = new String[mData.length*2];
 		for (int x = 0; x < mData.length; x++) {
 			temp[x] = mData[x];	 
 		}
@@ -62,7 +62,7 @@ public class SuperArray {
     /**add the value n to the next available slot in the superArray.
      *this will change the size. This function should always work
      *And will resize the SuperArray if needed.*/
-    public boolean add(int n){
+    public boolean add(String n){
 		if (mSize == mData.length) {
 			grow();
 		}
@@ -71,7 +71,7 @@ public class SuperArray {
     }
 	 
     //Add a value at a certain index
-    public void add(int index, int n) {
+    public void add(int index, String n) {
 		//cuz you can add am element to the end, so not >=
 		if (index < 0 || index > size())
 			throw new IndexOutOfBoundsException(""+index);
@@ -83,19 +83,19 @@ public class SuperArray {
 		mSize++;
     }
 	 
-    public int remove(int index) {
+    public String remove(int index) {
 		if (index < 0 || index >= size())
 			throw new IndexOutOfBoundsException(""+index);
-		int temp = mData[index];
+		String temp = mData[index];
 		shiftLeft(index);
 		mSize--;
 		return temp;
     }
 	 
-    public int set(int index, int n) {
+    public String set(int index, String n) {
 		if (index < 0 || index >= size())
 			throw new IndexOutOfBoundsException(""+index);
-		int temp = mData[index];
+		String temp = mData[index];
 		mData[index] = n;
 		return temp;
     }
@@ -139,24 +139,24 @@ public class SuperArray {
 		return res + "]";
     }
     
-    public int[] toArray() {
-		int[] res = new int[mSize];
+    public String[] toArray() {
+		String[] res = new String[mSize];
 		for (int x = 0; x < mSize; x++) {
 			res[x] = mData[x];
 		}
 		return res;
     }
 	
-	public int indexOf(int i) {
+	public int indexOf(String i) {
 		for (int x = 0; x < mSize; x++) {
-			if (mData[x] == i) return x;
+			if (mData[x].equals(i)) return x;
 		}
 		return -1;
 	}
 	
-	public int lastIndexOf(int i) {
+	public int lastIndexOf(String i) {
 		for (int x = mSize - 1; x > -1; x--) {
-			if (mData[x] == i) return x;
+			if (mData[x].equals(i)) return x;
 		}
 		return -1;
 	}
@@ -169,7 +169,7 @@ public class SuperArray {
     
     public boolean isEmpty() { return mSize == 0; }
 	
-    public int get(int index) {
+    public String get(int index) {
 		if (index < 0 || index >= size())
 			throw new IndexOutOfBoundsException("" + index);
 		return mData[index];
@@ -182,11 +182,11 @@ public class SuperArray {
 		SuperArray s = new SuperArray();
 		SuperArray t = new SuperArray();
 		SuperArray q = new SuperArray();
-		int f;
+		String f;
 		
 		for (int x = 0; x < 10; x++) {
-			s.add(x);
-			q.add(x);
+			s.add(""+x);
+			q.add(""+x);
 		}
 		//Standard created new array
 		System.out.println(s.toStringDebug());
@@ -194,11 +194,11 @@ public class SuperArray {
 		System.out.println(q.toStringDebug());
 		
 		System.out.println("addition");
-		s.add(0, 1);
+		s.add(0, "1");
 		System.out.println(s.toStringDebug());
-		s.add(s.size() - 1, -67);	//Remember this shifts things
+		s.add(s.size() - 1, "-67");	//Remember this shifts things
 		System.out.println(s.toStringDebug());
-		s.add(0);
+		s.add("0");
 		System.out.println(s.toStringDebug());
 		
 		System.out.println("trimming");
@@ -222,45 +222,45 @@ public class SuperArray {
 		System.out.println(s.toStringDebug());
 		
 		System.out.println("setting");
-		f = s.set(1, 29);
+		f = s.set(1, "29");
 		System.out.println(s.toStringDebug()+" replaced " + f);
-		f = s.set(0, 12345678);
+		f = s.set(0, "12345678");
 		System.out.println(s.toStringDebug()+" replaced "+f);
-		f = s.set(s.size() - 1, 90);
+		f = s.set(s.size() - 1, "90");
 		System.out.println(s.toStringDebug()+" replaced "+f);
 		
 		System.out.println("toArray");
-		s.add(2);
-		int[] test = s.toArray();
-		int[] test1 = new SuperArray().toArray();
-		for (int x : test) System.out.print(x + " ");
+		s.add("2");
+		String[] test = s.toArray();
+		String[] test1 = new SuperArray().toArray();
+		for (String x : test) System.out.print(x + " ");
 		System.out.println();
-		for (int x : test1) System.out.print(x + " ");
+		for (String x : test1) System.out.print(x + " ");
 		System.out.println();
 		
 		System.out.println("testing indexOf");
 		System.out.println(s.toStringDebug());
-		System.out.println(s.indexOf(2));		//2
-		System.out.println(s.indexOf(89));		//-1
-		System.out.println(s.indexOf(5));		//4
-		System.out.println(s.lastIndexOf(8));	//2
-		System.out.println(s.lastIndexOf(234));	//-1
-		System.out.println(s.lastIndexOf(2));	//7
+		System.out.println(s.indexOf("2"));		//2
+		System.out.println(s.indexOf("89"));		//-1
+		System.out.println(s.indexOf("5"));		//4
+		System.out.println(s.lastIndexOf("8"));	//2
+		System.out.println(s.lastIndexOf("234"));	//-1
+		System.out.println(s.lastIndexOf("2"));	//7
 		
 		System.out.println("string debug");
-		t.add(7);
+		t.add("7");
 		t.trimToSize();
 		System.out.println(t.toStringDebug());
 		System.out.println(t.size());
 		
 		System.out.println("clear");
 		t.clear();
-		t.add(4);
+		t.add("4");
 		System.out.println(t.toStringDebug());
 		t.clear();
 		System.out.println(t.toStringDebug());
-		t.add(6);
-		t.add(4);
+		t.add("6");
+		t.add("4");
 		System.out.println(t.toStringDebug());
 		
 		System.out.println("exceptions");
@@ -270,13 +270,13 @@ public class SuperArray {
 		//o.get(-1);
 		//o.get(0);
 		//o.get(10);
-		o.add(2);
-		o.add(1);
+		o.add("2");
+		o.add("1");
 		//o.set(-1, 5);
 		//o.set(5, 4);
 		//o.set(9, 0);
 		//o.add(-1, 5);
-		o.add(2, 4);//legal
+		o.add(2, "4");//legal
 		//o.add(6, 0);
 		//o.add(10, 5);
 		//o.remove(-1);

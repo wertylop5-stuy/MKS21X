@@ -1,63 +1,63 @@
 public class OrderedSuperArray extends SuperArray {
     public OrderedSuperArray() {}
     public OrderedSuperArray(int capacity) { super(capacity); }
-    public OrderedSuperArray(int[] ar) {
-		for (int x : ar) {
+    public OrderedSuperArray(String[] ar) {
+		for (String x : ar) {
 			add(x);
 			//super.add(x);
 		}
     }
     
 	@Override
-    public int set(int index, int n) {
+    public String set(int index, String n) {
 		throw new UnsupportedOperationException("Cannot set an ordered array");
     }
     
 	@Override
-    public void add(int index, int n) {
+    public void add(int index, String n) {
 		throw new UnsupportedOperationException("Cannot modify ordered array");	
     }
     
 	@Override
-    public boolean add(int n) {
+    public boolean add(String n) {
 		super.add(findPlace(n, 0, size()), n);
 		return true;
     }
     
     //some sort of binary serach algorithm
 	//Use with add
-    private int findPlace(int i, int start, int end) {
+    private int findPlace(String i, int start, int end) {
 		//System.out.println("start: " + start + "\nend: " + end);
 		if (start == end) {
 			if (start == size()) return start;
-			return (i < get(start) ? start : start + 1); 
+			return (i.compareTo(get(start)) < 0 ? start : start + 1); 
 		}
 		int mid = (start + (end - 1)) / 2;
 		//System.out.println("mid: " + mid);
 		
-		int tmp = get(mid);
+		String tmp = get(mid);
 		//System.out.println("val at mid: " + tmp);
 		
-		if (i == tmp) return mid;
-		if (i < tmp) return findPlace(i, start, mid);
-		else if (i > tmp) return findPlace(i, mid + 1, end);
+		if (i.compareTo(tmp) == 0) return mid;
+		if (i.compareTo(tmp) < 0) return findPlace(i, start, mid);
+		else if (i.compareTo(tmp) > 0) return findPlace(i, mid + 1, end);
 		
 		return -1;
     }
 	
 	@Override
-	public int indexOf(int n) {
+	public int indexOf(String n) {
 		return findPlace(n, 0, size(), 1);
 	}
 	
 	@Override
-	public int lastIndexOf(int n) {
+	public int lastIndexOf(String n) {
 		return findPlace(n, 0, size(), -1);
 	}
 	
 	//Use with indexOf
 	//positive direction is forward, neg is backward
-    private int findPlace(int i, int start, int end, int direction) {
+    private int findPlace(String i, int start, int end, int direction) {
 		//System.out.println("start: " + start + "\nend: " + end);
 		if (start == end) {
 			return start;
@@ -65,7 +65,7 @@ public class OrderedSuperArray extends SuperArray {
 		int mid = (start + (end - 1)) / 2;
 		//System.out.println("mid: " + mid);
 		
-		int tmp = get(mid);
+		String tmp = get(mid);
 		//System.out.println("val at mid: " + tmp);
 		
 		if (i == tmp) {
@@ -78,8 +78,8 @@ public class OrderedSuperArray extends SuperArray {
 			}
 			return res;
 		}
-		if (i < tmp) return findPlace(i, start, mid, direction);
-		else if (i > tmp) return findPlace(i, mid + 1, end, direction);
+		if (i.compareTo(tmp) < 0) return findPlace(i, start, mid, direction);
+		else if (i.compareTo(tmp) > 0) return findPlace(i, mid + 1, end, direction);
 		
 		return -1;
     }
@@ -89,29 +89,29 @@ public class OrderedSuperArray extends SuperArray {
 		//System.out.println(a.size());
 		//a.set(0, 1);
 		//a.add(1, 1);
-		int[] t = {0, 2, 3, 4, 5, 6, 7, 8};
+		String[] t = {"0", "2", "3", "4", "5", "6", "7", "8"};
 		OrderedSuperArray b = new OrderedSuperArray(t);
 		System.out.println(b.toStringDebug());
-		b.add(1);
+		b.add("1");
 		System.out.println(b.toStringDebug());
-		b.add(20);
+		b.add("20");
 		System.out.println(b.toStringDebug());
-		b.add(0);
+		b.add("0");
 		System.out.println(b.toStringDebug());
-		b.add(0);
+		b.add("0");
 		System.out.println(b.toStringDebug());
 		
-		System.out.println(b.indexOf(0) + "\n");//0
-		System.out.println(b.indexOf(1) + "\n");//3
-		System.out.println(b.lastIndexOf(0) + "\n");//2
-		System.out.println(b.lastIndexOf(1) + "\n");//3
+		System.out.println(b.indexOf("0") + "\n");//0
+		System.out.println(b.indexOf("1") + "\n");//3
+		System.out.println(b.lastIndexOf("0") + "\n");//2
+		System.out.println(b.lastIndexOf("1") + "\n");//3
 		
-		int[] y = {-1, 0, 1, 2, 2, 2, 2, 6, 8, 8, 8, 8, 9};
+		String[] y = {/*"-1",*/ "0", "1", "2", "2", "2", "2", "6", "8", "8", "8", "8", "9"};
 		b = new OrderedSuperArray(y);
-		System.out.println(b.indexOf(2) + "\n");//3
-		System.out.println(b.indexOf(8) + "\n");//8
-		System.out.println(b.lastIndexOf(2) + "\n");//6
-		System.out.println(b.lastIndexOf(8) + "\n");//11
+		System.out.println(b.indexOf("2") + "\n");//2
+		System.out.println(b.indexOf("8") + "\n");//7
+		System.out.println(b.lastIndexOf("2") + "\n");//5
+		System.out.println(b.lastIndexOf("8") + "\n");//10
 		/*
 		System.out.println(b.findPlace(1, 0, b.size()) + "\n");//1
 		System.out.println(b.findPlace(4, 0, b.size()) + "\n");//3

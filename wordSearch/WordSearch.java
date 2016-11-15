@@ -69,6 +69,9 @@ public class WordSearch{
      *@return true when the word is added successfully. When the word doesn't fit,
      *or there are overlapping letters that do not match, then false is returned.
      */
+     //modfiy to one function
+     //chekc direction, set a variable to change thee direction every time it moves
+     //ex: delta row and delta col
     public boolean addWordHorizontal(String word,int row, int col){
     	int counter;
     	int tRow, tCol; 
@@ -78,6 +81,7 @@ public class WordSearch{
     			runs = new StringBuilder(word).reverse().toString(), turn++) {
     		//System.out.println("current runs: " + runs);
     		if ((mData[row].length - col) < runs.length()) continue;
+    		//using an exception would be better for this (more versatile
     		
     		tRow = row;
     		tCol = col;

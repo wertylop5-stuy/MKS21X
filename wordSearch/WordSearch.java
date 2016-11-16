@@ -1,5 +1,13 @@
 public class WordSearch{
     private char[][]mData;
+	//all words from a text file get added to wordsToAdd , indicating that they have not yet been added
+	private ArrayList<String> wordsToAdd;
+
+	//all words that were successfully added get moved into wordsAdded.
+	private ArrayList<String> wordsAdded;
+
+	//a random Object to unify your random calls
+	private Random randgen;
 
     /**Initialize the grid to the size specified 
 
@@ -60,19 +68,19 @@ public class WordSearch{
 	else return false
 	*/
     /**Attempts to add a given word to the specified position of the WordGrid.
-     *The word is added from left to right, must fit on the WordGrid, and must
-     *have a corresponding letter to match any letters that it overlaps.
+     *The word is added according to the direction parameter and will attempt
+	 *to comply with existing letters. The method will also reverse the word
+	 *to see if it fits as well
      *
      *@param word is any text to be added to the word grid.
      *@param row is the vertical locaiton of where you want the word to start.
      *@param col is the horizontal location of where you want the word to start.
+	 *@param direction the direction the word will be added
      *@return true when the word is added successfully. When the word doesn't fit,
      *or there are overlapping letters that do not match, then false is returned.
      */
-     //modfiy to one function
-     //chekc direction, set a variable to change thee direction every time it moves
-     //ex: delta row and delta col
-    public boolean addWordHorizontal(String word,int row, int col){
+    
+	public boolean addSingleWord(String word,int row, int col, Direction direction){
     	int counter;
     	int tRow, tCol; 
     	String runs = word;
@@ -83,23 +91,30 @@ public class WordSearch{
     		if ((mData[row].length - col) < runs.length()) continue;
     		//using an exception would be better for this (more versatile
     		
-    		tRow = row;
-    		tCol = col;
-    		counter = 0;
-    		for (counter = 0; counter < runs.length(); counter++) {
-				if (mData[tRow][tCol] != '_' && 
-    				mData[tRow][tCol] != runs.charAt(counter)) {
-    				//System.out.println("grid: " + mData[tRow][tCol]);
-    				//System.out.println("runs: " + runs.charAt(counter));
-    				break;
-    			}
-    			tCol++;
+			try {
+				tRow = row;
+				tCol = col;
+				counter = 0;
+				for (counter = 0; counter < runs.length(); counter++) {
+					if (mData[tRow][tCol] != '_' && 
+						mData[tRow][tCol] != runs.charAt(counter)) {
+						//System.out.println("grid: " + mData[tRow][tCol]);
+						//System.out.println("runs: " + runs.charAt(counter));
+						break;
+					}
+					tRow += direction.getDeltaY();
+					tCol += direction.getDeltaX();
+				}
+			}
+			catch(ArrayIndexOutOfBoundsException e) {
+				return false;
 			}
     		
     		if (counter == runs.length()) {
     			for (counter = 0; counter < runs.length(); counter++) {
     				mData[row][col] = runs.charAt(counter);
-    				col++;
+    				col += direction.getDeltaX();
+					row += direction.getDeltaY();
     			}
     			return true;
     		}
@@ -107,91 +122,51 @@ public class WordSearch{
     	}
     	return false;
     }
-
-
-   /**Attempts to add a given word to the specified position of the WordGrid.
-     *The word is added from top to bottom, must fit on the WordGrid, and must
-     *have a corresponding letter to match any letters that it overlaps.
-     *
-     *@param word is any text to be added to the word grid.
-     *@param row is the vertical locaiton of where you want the word to start.
-     *@param col is the horizontal location of where you want the word to start.
-     *@return true when the word is added successfully. When the word doesn't fit,
-     *or there are overlapping letters that do not match, then false is returned.
-     */
-    public boolean addWordVertical(String word,int row, int col){
-    	int counter;
-    	int tRow, tCol; 
-    	String runs = word;
-    	for (	int turn = 0;
-    			turn < 2;
-    			runs = new StringBuilder(word).reverse().toString(), turn++) {
-    		//System.out.println("current runs: " + runs);
-    		if ((mData.length - row) < runs.length()) continue;
-    		
-    		tRow = row;
-    		tCol = col;
-    		counter = 0;
-    		for (counter = 0; counter < runs.length(); counter++) {
-				if (mData[tRow][tCol] != '_' && 
-    				mData[tRow][tCol] != runs.charAt(counter)) {
-    				//System.out.println("grid: " + mData[tRow][tCol]);
-    				//System.out.println("runs: " + runs.charAt(counter));
-    				break;
-    			}
-    			tRow++;
-			}
-    		
-    		if (counter == runs.length()) {
-    			for (counter = 0; counter < runs.length(); counter++) {
-    				mData[row][col] = runs.charAt(counter);
-    				row++;
-    			}
-    			return true;
-    		}
-    		else continue;
-    	}
-    	return false;
-    }
-	
 	
 	public static void main(String[] args) {
-		WordSearch w = new WordSearch(3, 3);
+		//WordSearch w = new WordSearch(3, 3);
 		//System.out.println(w);
-		//w.addWordHorizontal("abc", 0, 0);
-		//w.addWordHorizontal("abc", 2, 0);
-		//w.addWordHorizontal("a", 1, 2);
+		//w.addSingleWord("abc", 0, 0, Direction.NORTHEAST);
+		//w.addSingleWord("abc", 2, 0);
+		/*for (Direction d : Direction.values()) {
+			w.addSingleWord("ab", 1, 1, d);
+		}*/
+		//w.addSingleWord("ab", 1, 1, Direction.NORTHEAST);
 		//System.out.println(w);
 		
 		WordSearch b = new WordSearch(10, 20);
-		//b.addWordHorizontal("abc", 1, 0);
-		//b.addWordHorizontal("cfg", 1, 2);
-		//b.addWordHorizontal("eta", 1, 4);
-		//b.addWordHorizontal("rty", 1, 5);
-		//b.addWordHorizontal("caer", 1, 2);
-		//b.addWordVertical("abc", 1, 0);
-		b.addWordVertical("abc", 0, 1);
-		b.addWordVertical("abcdefghij", 0, 2);
-		b.addWordVertical("cp", 2, 1);
-		b.addWordVertical("bcpg", 1, 1);
-		b.addWordVertical("yut", 6, 1);
-		b.addWordVertical("guy", 4, 1);
-		b.addWordHorizontal("aaa", 0, 0);
-		b.addWordHorizontal("fug", 5, 0);
-		b.addWordHorizontal("appleton", 3, 6);
-		b.addWordHorizontal("fried", 6, 6);
-		b.addWordVertical("latex", 3, 9);
-		b.addWordVertical("rapport", 0, 7);
-		b.addWordHorizontal("extra", 7, 6);
-		b.addWordHorizontal("nigeria", 3, 13);
+		/*b.addSingleWord("abc", 1, 0, Direction.EAST);
+		b.addSingleWord("cfg", 1, 2, Direction.EAST);
+		b.addSingleWord("eta", 1, 4, Direction.WEST);
+		b.addSingleWord("rty", 1, 5, Direction.SOUTHWEST);
+		b.addSingleWord("caer", 1, 2, Direction.);
+		b.addSingleWord("abc", 1, 0, Direction.);*/
+		
+		/*b.addSingleWord("abc", 0, 1);
+		b.addSingleWord("abcdefghij", 0, 2);
+		b.addSingleWord("cp", 2, 1);
+		b.addSingleWord("bcpg", 1, 1);
+		b.addSingleWord("yut", 6, 1);
+		b.addSingleWord("guy", 4, 1);
+		b.addSingleWord("aaa", 0, 0);
+		b.addSingleWord("fug", 5, 0);*/
+		b.addSingleWord("appleton", 3, 6, Direction.EAST);
+		b.addSingleWord("fried", 6, 6, Direction.EAST);
+		b.addSingleWord("latex", 3, 9, Direction.SOUTH);
+		b.addSingleWord("rapport", 0, 7, Direction.SOUTH);
+		b.addSingleWord("extra", 7, 6, Direction.EAST);
+		b.addSingleWord("nigeria", 3, 13, Direction.EAST);
+		b.addSingleWord("falling", 6, 6, Direction.NORTHEAST);
+		b.addSingleWord("rate", 9, 4, Direction.NORTHEAST);
 		
 		//ones that wont work
-		b.addWordVertical("pixie", 7, 8);		
-		b.addWordHorizontal("dragon", 1, 5);
-		b.addWordHorizontal("triskaidekaphobia", 1, 5);
-		b.addWordVertical("triskaidekaphobia", 1, 5);
+		/*b.addSingleWord("pixie", 7, 8, Direction.);		
+		b.addSingleWord("dragon", 1, 5, Direction.);
+		b.addSingleWord("triskaidekaphobia", 1, 5, Direction.);
+		b.addSingleWord("triskaidekaphobia", 1, 5, Direction.);*/
 		
 		System.out.println(b);
+		
 	}
 }
 

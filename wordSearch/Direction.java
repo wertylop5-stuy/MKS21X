@@ -1,4 +1,5 @@
 public enum Direction {
+	//Format (y, x)
 	NORTH(-1, 0),
 	NORTHEAST(-1, 1),
 	EAST(0, 1), 
@@ -11,7 +12,7 @@ public enum Direction {
 	private int mDeltaX;
 	private int mDeltaY;
 	
-	Direction(int deltaX, int deltaY) {
+	Direction(int deltaY, int deltaX) {
 		mDeltaX = deltaX;
 		mDeltaY = deltaY;
 	}

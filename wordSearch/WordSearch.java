@@ -1,13 +1,19 @@
+import java.util.Scanner;
+import java.util.ArrayList;
+import java.util.Random;
+import java.util.List;
+import java.io.File;
+import java.io.FileNotFoundException;
+
 public class WordSearch{
     private char[][]mData;
-	//all words from a text file get added to wordsToAdd , indicating that they have not yet been added
-	private ArrayList<String> wordsToAdd;
-
-	//all words that were successfully added get moved into wordsAdded.
-	private ArrayList<String> wordsAdded;
-
-	//a random Object to unify your random calls
-	private Random randgen;
+	
+	private List<String> mWordsToAdd;
+	private List<String> mWordsAdded;
+	
+	private Random mRandgen;
+	
+	private String mDataFile;
 
     /**Initialize the grid to the size specified 
 
@@ -15,7 +21,7 @@ public class WordSearch{
      *@param row is the starting height of the WordSearch
      *@param col is the starting width of the WordSearch
      */
-    public WordSearch(int rows,int cols){
+    public WordSearch(int rows, int cols, String filename){
     	if (rows <= 0) {
     		throw new IllegalArgumentException("zero or negative row: " + rows);
     	}
@@ -24,8 +30,46 @@ public class WordSearch{
     	}
     	
     	mData = new char[rows][cols];
+		mWordsToAdd = new ArrayList<>();
+		mWordsAdded = new ArrayList<>();
+		mRandgen = new Random();
+		
     	clear();
+		try {
+			loadWords(filename);
+		}
+		catch (FileNotFoundException e) {
+			System.err.println("File " + filename + " does not exist!");
+			System.exit(1);
+		}
+		
+		fillWithWords();
     }
+	
+	public WordSearch(int rows, int cols, String filename, int seed) {
+		if (rows <= 0) {
+    		throw new IllegalArgumentException("zero or negative row: " + rows);
+    	}
+    	if (cols <= 0) {
+    		throw new IllegalArgumentException("zero or negative col: " + cols);
+    	}
+    	
+    	mData = new char[rows][cols];
+		mWordsToAdd = new ArrayList<>();
+		mWordsAdded = new ArrayList<>();
+		mRandgen = new Random(seed);
+		
+    	clear();
+		try {
+			loadWords(filename);
+		}
+		catch (FileNotFoundException e) {
+			System.err.println("File " + filename + " does not exist!");
+			System.exit(1);
+		}
+		
+		fillWithWords();
+	}
 
     /**Set all values in the WordSearch to underscores'_'*/
     private void clear(){
@@ -51,7 +95,27 @@ public class WordSearch{
     	}
     	return res;
     }
-
+	
+	//Aim for 4 different pos with each word with 3 directions each
+	public void fillWithWords() {
+		Direction d;
+		int dirLen = Direction.values().length;
+		int row, col;
+		for (String s : mWordsToAdd) {
+			row = mRandgen.nextInt() % mData.length;
+			col = mRandgen.nextInt() % mData[row].length;
+			
+			for (int runs = 0; runs < 4; runs++) {
+				d = Direction.values()[mRandgen.nextInt() % dirLen];
+				if (addSingleWord(s, row, col, d)) {
+					mWordsAdded.add(mWordsToAdd.remove(s));
+					break;
+				}
+			}
+		}
+	}
+	
+	
 	/*
 	Start at row, col
 	if (ar.len - startIndex) < word.len return false
@@ -79,7 +143,6 @@ public class WordSearch{
      *@return true when the word is added successfully. When the word doesn't fit,
      *or there are overlapping letters that do not match, then false is returned.
      */
-    
 	public boolean addSingleWord(String word,int row, int col, Direction direction){
     	int counter;
     	int tRow, tCol; 
@@ -123,6 +186,25 @@ public class WordSearch{
     	return false;
     }
 	
+	public void loadWords(String filename)
+		throws FileNotFoundException {
+		Scanner in = new Scanner(new File(filename));
+		while (in.hasNext()) {
+			mWordsToAdd.add(in.next());
+		}
+	}
+	
+	public void printWordsToAdd() {
+		for (String s : mWordsToAdd) {
+			System.out.println(s);
+		}
+	}
+	public void printAddedWords() {
+		for (String s : mWordsAdded) {
+			System.out.println(s);
+		}
+	}
+	
 	public static void main(String[] args) {
 		//WordSearch w = new WordSearch(3, 3);
 		//System.out.println(w);
@@ -134,7 +216,7 @@ public class WordSearch{
 		//w.addSingleWord("ab", 1, 1, Direction.NORTHEAST);
 		//System.out.println(w);
 		
-		WordSearch b = new WordSearch(10, 20);
+		//WordSearch b = new WordSearch(10, 20);
 		/*b.addSingleWord("abc", 1, 0, Direction.EAST);
 		b.addSingleWord("cfg", 1, 2, Direction.EAST);
 		b.addSingleWord("eta", 1, 4, Direction.WEST);
@@ -149,7 +231,7 @@ public class WordSearch{
 		b.addSingleWord("yut", 6, 1);
 		b.addSingleWord("guy", 4, 1);
 		b.addSingleWord("aaa", 0, 0);
-		b.addSingleWord("fug", 5, 0);*/
+		b.addSingleWord("fug", 5, 0);
 		b.addSingleWord("appleton", 3, 6, Direction.EAST);
 		b.addSingleWord("fried", 6, 6, Direction.EAST);
 		b.addSingleWord("latex", 3, 9, Direction.SOUTH);
@@ -157,7 +239,7 @@ public class WordSearch{
 		b.addSingleWord("extra", 7, 6, Direction.EAST);
 		b.addSingleWord("nigeria", 3, 13, Direction.EAST);
 		b.addSingleWord("falling", 6, 6, Direction.NORTHEAST);
-		b.addSingleWord("rate", 9, 4, Direction.NORTHEAST);
+		b.addSingleWord("rate", 9, 4, Direction.NORTHEAST);*/
 		
 		//ones that wont work
 		/*b.addSingleWord("pixie", 7, 8, Direction.);		
@@ -165,8 +247,18 @@ public class WordSearch{
 		b.addSingleWord("triskaidekaphobia", 1, 5, Direction.);
 		b.addSingleWord("triskaidekaphobia", 1, 5, Direction.);*/
 		
-		System.out.println(b);
+		//System.out.println(b);
 		
+		/*try {
+			Scanner in = new Scanner(new File("words.txt"));
+			while (in.hasNext()) {
+				System.out.println(in.nextLine());
+			}
+		}
+		catch (FileNotFoundException e) {
+			
+		}
+		*/
 	}
 }
 

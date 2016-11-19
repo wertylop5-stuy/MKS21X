@@ -12,8 +12,8 @@ public class WordSearch{
 	private List<String> mWordsAdded;
 	
 	private Random mRandgen;
-	
 	private String mDataFile;
+	private int mSeed;
 
     /**Initialize the grid to the size specified 
 
@@ -22,31 +22,16 @@ public class WordSearch{
      *@param col is the starting width of the WordSearch
      */
     public WordSearch(int rows, int cols, String filename){
-    	if (rows <= 0) {
-    		throw new IllegalArgumentException("zero or negative row: " + rows);
-    	}
-    	if (cols <= 0) {
-    		throw new IllegalArgumentException("zero or negative col: " + cols);
-    	}
-    	
-    	mData = new char[rows][cols];
-		mWordsToAdd = new ArrayList<>();
-		mWordsAdded = new ArrayList<>();
-		mRandgen = new Random();
-		
-    	clear();
-		try {
-			loadWords(filename);
-		}
-		catch (FileNotFoundException e) {
-			System.err.println("File " + filename + " does not exist!");
-			System.exit(1);
-		}
-		
-		fillWithWords();
+    	this(rows, cols, filename, null);
     }
 	
-	public WordSearch(int rows, int cols, String filename, int seed) {
+	public WordSearch(int rows, int cols,
+			String filename, Integer seed) {
+		this(rows, cols, filename, seed, false);
+	}
+	
+	public WordSearch(int rows, int cols,
+			String filename, Integer seed, boolean printKey) {
 		if (rows <= 0) {
     		throw new IllegalArgumentException("zero or negative row: " + rows);
     	}
@@ -57,7 +42,15 @@ public class WordSearch{
     	mData = new char[rows][cols];
 		mWordsToAdd = new ArrayList<>();
 		mWordsAdded = new ArrayList<>();
-		mRandgen = new Random(seed);
+		
+		if (seed != null) {
+			mSeed = seed;
+			mRandgen = new Random(seed);
+		}
+		else {
+			mSeed = (int)(Math.random() * 100000);
+			mRandgen = new Random(mSeed);
+		}
 		
     	clear();
 		try {
@@ -69,6 +62,9 @@ public class WordSearch{
 		}
 		
 		fillWithWords();
+		if (!printKey) {
+			fillInRemaining();
+		}
 	}
 
     /**Set all values in the WordSearch to underscores'_'*/
@@ -79,38 +75,43 @@ public class WordSearch{
     		}
     	}
     }
-
-    /**The proper formatting for a WordGrid is created in the toString.
-     *@return a String with each character separated by spaces, and rows
-     *separated by newlines.
-     */
-    public String toString(){
-    	String res = "";
-    	for (int x = 0; x < mData.length; x++) {
-    		for (int y = 0; y < mData[x].length; y++) {
-    			res += "" + mData[x][y];
-    			if (y < mData[x].length - 1) res += " ";
-    		}
-    		res += "\n";
-    	}
-    	return res;
-    }
 	
-	//Aim for 4 different pos with each word with 3 directions each
-	public void fillWithWords() {
+	private void fillInRemaining() {
+		for (int x = 0; x < mData.length; x++) {
+			for (int y = 0; y < mData[x].length; y++) {
+				if (mData[x][y] == '_') {
+					mData[x][y] =
+						(char)(mRandgen.nextInt('Z' - 'A' + 1) + 'A');
+				}
+			}
+		}
+	}
+	
+	//Aim for 2 different pos with each word with 4 directions each
+	private void fillWithWords() {
 		Direction d;
 		int dirLen = Direction.values().length;
-		int row, col;
-		for (String s : mWordsToAdd) {
-			row = mRandgen.nextInt() % mData.length;
-			col = mRandgen.nextInt() % mData[row].length;
-			
-			for (int runs = 0; runs < 4; runs++) {
-				d = Direction.values()[mRandgen.nextInt() % dirLen];
-				if (addSingleWord(s, row, col, d)) {
-					mWordsAdded.add(mWordsToAdd.remove(s));
-					break;
+		//List<Direction> = new ArrayList<>();
+		int row = 0, col = 0;
+		boolean hasAdded = false;
+		
+		//8 tries for each word
+		int x = 0;
+		while (x < mWordsToAdd.size()) {
+			hasAdded = false;
+			for (int runs = 0; runs < 8 && !hasAdded; runs++) {
+				if (runs % 4 == 0) {
+					row = mRandgen.nextInt(mData.length);
+					col = mRandgen.nextInt(mData[row].length);
 				}
+				d = Direction.values()[mRandgen.nextInt(dirLen)];
+				if (addSingleWord(mWordsToAdd.get(x), row, col, d)) {
+					mWordsAdded.add(mWordsToAdd.remove(x));
+					hasAdded = true;
+				}
+			}
+			if (!hasAdded) {
+				x++;
 			}
 		}
 	}
@@ -143,7 +144,7 @@ public class WordSearch{
      *@return true when the word is added successfully. When the word doesn't fit,
      *or there are overlapping letters that do not match, then false is returned.
      */
-	public boolean addSingleWord(String word,int row, int col, Direction direction){
+	private boolean addSingleWord(String word,int row, int col, Direction direction){
     	int counter;
     	int tRow, tCol; 
     	String runs = word;
@@ -186,11 +187,11 @@ public class WordSearch{
     	return false;
     }
 	
-	public void loadWords(String filename)
+	private void loadWords(String filename)
 		throws FileNotFoundException {
 		Scanner in = new Scanner(new File(filename));
 		while (in.hasNext()) {
-			mWordsToAdd.add(in.next());
+			mWordsToAdd.add(in.next().toUpperCase());
 		}
 	}
 	
@@ -204,6 +205,26 @@ public class WordSearch{
 			System.out.println(s);
 		}
 	}
+	
+	public int getSeed() {
+		return mSeed;
+	}
+	
+	/**The proper formatting for a WordGrid is created in the toString.
+     *@return a String with each character separated by spaces, and rows
+     *separated by newlines.
+     */
+    public String toString(){
+    	String res = "";
+    	for (int x = 0; x < mData.length; x++) {
+    		for (int y = 0; y < mData[x].length; y++) {
+    			res += "" + mData[x][y];
+    			if (y < mData[x].length - 1) res += " ";
+    		}
+    		res += "\n";
+    	}
+    	return res;
+    }
 	
 	public static void main(String[] args) {
 		//WordSearch w = new WordSearch(3, 3);

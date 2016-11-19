@@ -48,12 +48,6 @@ public class Driver {
 			}
 		}
 		else if (args.length == 5) {
-			if (!args[4].equals("key")) {
-				System.err.println(
-					Driver.class.getSimpleName() +
-					": argument answers must have value \"key\", returning full board"
-				);
-			}
 			try {
 				w = new WordSearch(
 					Integer.parseInt(args[0]),
@@ -66,6 +60,12 @@ public class Driver {
 			catch (NumberFormatException e) {
 				System.out.println(USAGE_STRING);
 				System.exit(1);
+			}
+			if (!args[4].equals("key")) {
+				System.err.println(
+					Driver.class.getSimpleName() +
+					": argument answers must have value \"key\", returning full board"
+				);
 			}
 		}
 		

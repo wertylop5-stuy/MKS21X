@@ -1,2 +1,4 @@
-fetch
-	
+checkout
+	change branches or revert to a previous commit
+reset
+	can reset to the last commit, or clear the staging area

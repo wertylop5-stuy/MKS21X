@@ -5,18 +5,27 @@ public class CirculatingBook
 	
 	public CirculatingBook(String author, String title,
 				String isbn, String callNumber) {
+		super(author, title, isbn, callNumber);
 		mCurrentHolder = mDueDate = null;
 	}
 	
 	@Override
-	public checkout(String patron, String due) {
+	public void checkout(String patron, String due) {
 		mCurrentHolder = patron;
 		mDueDate = due;
 	}
 	
 	@Override
-	public String circulationStatus("") {
-		
+	public void returned() {
+		mCurrentHolder = mDueDate = null;
+	}
+	
+	@Override
+	public String circulationStatus() {
+		if (mCurrentHolder == null) {
+			return "Book available on shelves";
+		}
+		return mCurrentHolder + "," + mDueDate;
 	}
 	
 	public String getCurrentHolder() {return mCurrentHolder;}
@@ -26,6 +35,6 @@ public class CirculatingBook
 	
 	public String getDueDate() {return mDueDate;}
 	public void setDueDate(String dueDate) {
-		mDueDate - dueDate;
+		mDueDate = dueDate;
 	}
 }

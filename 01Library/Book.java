@@ -23,8 +23,4 @@ public class Book {
     
     public String getIsbn() {return mIsbn;}
     public void setIsbn(String isbn) {mIsbn = isbn;}
-	
-	public static void main(String[] args) {
-		LibraryBook l = new ReferenceBook("Bill", "yougrt", "45124566");
-	}
 }

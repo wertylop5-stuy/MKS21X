@@ -1,6 +1,6 @@
-public abstract class LibraryBook<T extends LibraryBook>
+public abstract class LibraryBook//<T extends LibraryBook>
     extends Book
-    implements Comparable<T> {
+    implements Comparable<LibraryBook> {
     private String mCallNumber;
     
     LibraryBook(String author, String title,

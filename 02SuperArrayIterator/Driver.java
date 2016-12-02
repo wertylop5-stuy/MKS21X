@@ -18,5 +18,17 @@ public class Driver{
     for(String s : data){
       System.out.print(s+" ");
     }
+    
+    i = 25;
+    while(i > 0){
+      data.add(""+(char)('A'+i%26));
+      i--;
+    }
+    System.out.println();
+    System.out.println("bigger loop");
+    for(String s : data){
+      System.out.print(s+" ");
+    }
+    System.out.println();
   }
 }

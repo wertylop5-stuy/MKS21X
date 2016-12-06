@@ -31,9 +31,13 @@ public class DoneGoofed {
 	*/
 	public static boolean isDone2(int[][] values) {
 		for (int x = 0; x < 4; x++) {
-			for (int y = 0; y < 5; y++) {
-				if (!(values[x][] == values[x+y/4][y+1%4]+1) || 
-					values[x][y] * values[x+y/4][y+1%4] == 0) return false;
+			for (int y = 0; y < 4; y++) {
+				System.out.print(values[x][y] + " ");
+				System.out.println(values[x+y/3][y+1%3]);
+				System.out.println(x + " " + (y) + " indexes");
+				System.out.println(x+y/3 + " " + (y+1%3) + " indexes2");
+				if (!(values[x][y] == values[x+y/3][y+1%3]+1 || 
+					values[x][y] * values[x+y/4][y+1%4] == 0)) return false;
 			}
 		}
 		return true;

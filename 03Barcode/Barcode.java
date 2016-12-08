@@ -11,19 +11,17 @@ public class Barcode implements Comparable<Barcode>{
 	//               or zip contains a non digit
 	//               _zip and _checkDigit are initialized.
 	public Barcode(String zip) {
-		System.out.println(zip);
-		Pattern code = Pattern.compile("^(\\d){5}$");
-		Matcher m = code.matcher(zip);
+		//System.out.println(zip);
 		
-		if (m.matches()) mZip = zip;
-		else throw new IllegalArgumentException("incorrectly formatted zip");
+		if (isValidZip(zip)) mZip = zip;
+		else throw new NumberFormatException("incorrectly formatted zip");
 		
 		mCheckDigit = checkSum();
 	}
-
+	
 	// postcondition: Creates a copy of a bar code.
 	public Barcode clone() {
-		return null;
+		return new Barcode(mZip);
 	}
 
 
@@ -35,6 +33,12 @@ public class Barcode implements Comparable<Barcode>{
 		}
 		return sum % 10;
 	}
+	
+	private boolean isValidZip(String zip) {
+		Pattern code = Pattern.compile("^(\\d){5}$");
+		Matcher m = code.matcher(zip);
+		return m.matches();
+	}
 
 	//postcondition: format zip + check digit + barcode 
 	//ex. "084518  |||:::|::|::|::|:|:|::::|||::|:|"
@@ -44,7 +48,8 @@ public class Barcode implements Comparable<Barcode>{
 		for (char c : mZip.toCharArray()) {
 			res += getZipDigit(c);
 		}
-		return res + "|";
+		return res +
+			getZipDigit(new Integer(mCheckDigit).toString().charAt(0)) + "|";
 	}
 	
 	private String getZipDigit(char c) {
@@ -69,16 +74,21 @@ public class Barcode implements Comparable<Barcode>{
 				return "|:|::";
 			case 0:
 				return "||:::";
-			default: throw new IllegalArgumentException();
+			default:
+				throw new NumberFormatException("This shouldn't happen: " + c);
 		}
 	}
-
-//git add *.java;git commit -m "Started 03Barcode";git push origin master
+	
 	// postcondition: compares the zip + checkdigit, in numerical order. 
 	@Override
 	public int compareTo(Barcode other) {
-		return 0;
+		return (mZip + mCheckDigit)
+			.compareTo(other.getZip() + other.getCheckDigit());
 	}
+	
+	//Getters
+	public String getZip() { return mZip; }
+	public int getCheckDigit() { return mCheckDigit; }
 	
 	public static void main(String[] args) {
 		Barcode b = new Barcode("12345");
@@ -87,5 +97,11 @@ public class Barcode implements Comparable<Barcode>{
 		//b = new Barcode("123456");
 		//b = new Barcode("12t45");
 		System.out.println(b);
+		Barcode c = new Barcode("08451");
+		System.out.println(c.toString()
+			.equals("|||:::|::|::|::|:|:|::::|||::|:|"));
+		System.out.println(b.compareTo(c));
+		System.out.println(c.compareTo(b));
+		System.out.println(c.compareTo(c));
 	}
 }

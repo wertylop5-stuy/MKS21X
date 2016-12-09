@@ -1,7 +1,21 @@
 //import java.util.stream;
 import java.util.regex.*;
 
+//TODO finish toZip
 public class Barcode implements Comparable<Barcode>{
+	public static final String[] BAR_DIGITS = {
+		"||:::",
+		"::|:|",
+		"::||:",
+		":|::|",
+		":|:|:",
+		":||::",
+		"|:::|",
+		"|::|:",
+		"|:|::",
+		":::||"
+	};
+	
 	private String mZip;
 	private int mCheckDigit;
 
@@ -35,48 +49,49 @@ public class Barcode implements Comparable<Barcode>{
 	}
 	
 	private boolean isValidZip(String zip) {
-		Pattern code = Pattern.compile("^(\\d){5}$");
+		/*Pattern code = Pattern.compile("^(\\d){5}$");
 		Matcher m = code.matcher(zip);
-		return m.matches();
+		return m.matches();*/
+		return Pattern.matches("^(\\d){5}$", zip);
 	}
 
 	//postcondition: format zip + check digit + barcode 
 	//ex. "084518  |||:::|::|::|::|:|:|::::|||::|:|"
-	@Override     
-	public String toString() {
+	     
+	public static String toCode(String zip, int checkDigit) {
 		String res = "|";
-		for (char c : mZip.toCharArray()) {
+		for (char c : zip.toCharArray()) {
 			res += getZipDigit(c);
 		}
 		return res +
-			getZipDigit(new Integer(mCheckDigit).toString().charAt(0)) + "|";
+			getZipDigit(new Integer(checkDigit).toString().charAt(0)) + "|";
+	}
+	
+	public static String toZip(String code) {
+		/*
+		Will test if right length, has | at start and end
+		and has no illegal characters
+		*/
+		if (!Pattern.matches("^\\|[:|]{30}\\|$", code))
+			throw new IllegalArgumentException("malformed barcode");
+		
+		String res = "";
+		/*
+		Will convert to number, throw error if digit
+		no correspond to number or
+		*/
+		for (int i = 1; i < code.length() - 5; i+= 5) {
+			if (!)
+		}
+	}
+	
+	@Override
+	public String toString() {
+		return toCode();
 	}
 	
 	private String getZipDigit(char c) {
-		switch(Character.digit(c, 10)) {
-			case 1:
-				return ":::||";
-			case 2:
-				return "::|:|";
-			case 3:
-				return "::||:";
-			case 4:
-				return ":|::|";
-			case 5:
-				return ":|:|:";
-			case 6:
-				return ":||::";
-			case 7:
-				return "|:::|";
-			case 8:
-				return "|::|:";
-			case 9:
-				return "|:|::";
-			case 0:
-				return "||:::";
-			default:
-				throw new NumberFormatException("This shouldn't happen: " + c);
-		}
+		return BAR_DIGITS[Character.digit(c)];
 	}
 	
 	// postcondition: compares the zip + checkdigit, in numerical order. 

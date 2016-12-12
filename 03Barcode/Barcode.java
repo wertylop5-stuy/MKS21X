@@ -7,6 +7,7 @@ import java.util.Arrays;
 public class Barcode implements Comparable<Barcode>{
 	public static final String[] BAR_DIGITS = {
 		"||:::",
+		":::||",
 		"::|:|",
 		"::||:",
 		":|::|",
@@ -14,8 +15,7 @@ public class Barcode implements Comparable<Barcode>{
 		":||::",
 		"|:::|",
 		"|::|:",
-		"|:|::",
-		":::||"
+		"|:|::"
 	};
 	
 	private String mZip;
@@ -64,13 +64,13 @@ public class Barcode implements Comparable<Barcode>{
 	public static String toCode(String zip) {
 		String res = "|";
 		int checkDigit = (new Barcode(zip)).getCheckDigit();
-		System.out.println(zip);
-		System.out.println(checkDigit);
+		//System.out.println(zip);
+		//System.out.println(checkDigit);
 		
 		for (char c : zip.toCharArray()) {
 			res += BAR_DIGITS[Character.digit(c, 10)];
-			System.out.println(BAR_DIGITS[Character.digit(c, 10)] + " and " +
-			c);
+			//System.out.println(BAR_DIGITS[Character.digit(c, 10)] + " and " +
+			//c);
 		}
 		return res +
 			BAR_DIGITS[/*new Integer(checkDigit).toString().charAt(0)*/checkDigit] + "|";
@@ -96,11 +96,15 @@ public class Barcode implements Comparable<Barcode>{
 		the checksum
 		*/
 		int i;
-		for (i = 1; i < code.length() - 5; i+= 5) {
+		for (i = 1; i < code.length() - 10; i+= 5) {
+			//System.out.println(i / 5 + " " + i);
 			if (!digits.contains(code.substring(i, i+5)))
 				throw new IllegalArgumentException("Malformed barcode");
-			res += "" + (sum += digits.indexOf(code.substring(i, i+5)));
+			//System.out.println(digits.indexOf(code.substring(i, i+5)));
+			res += digits.indexOf(code.substring(i, i+5));
+			sum += digits.indexOf(code.substring(i, i+5));
 		}
+		//System.out.println(i / 5 + " " + i);
 		if (digits.indexOf(code.substring(i, i+5)) != sum % 10)
 			throw new IllegalArgumentException("Checksum doesn't match");
 		return res;
@@ -139,20 +143,53 @@ public class Barcode implements Comparable<Barcode>{
 	public int getCheckDigit() { return checkSum(); }
 	
 	public static void main(String[] args) {
-		//Barcode b = new Barcode("12345");
-		//System.out.println();
-		//b = new Barcode("12");
-		//b = new Barcode("retyu");
-		//b = new Barcode("123456");
-		//b = new Barcode("12t45");
-		/*System.out.println(new Barcode("12345"));
-		System.out.println(toCode("00000"));
-		Barcode c = new Barcode("08451");*/
+		System.out.println();
+		System.out.println("toString");
+		System.out.println(new Barcode("26453"));
+		System.out.println(new Barcode("21233"));
+		
+		for (int x = 0; x < 2; x++) {
+			try {
+				switch(x) {
+					case 0:
+						System.out.println(new Barcode("few"));
+					case 1:
+						System.out.println(new Barcode("123"));
+				}
+			}
+			catch (Exception e) {e.printStackTrace();};
+		}
+		
+		System.out.println("compareTo");
+		System.out.println(
+			new Barcode("23312").compareTo(new Barcode("10934")));
+		System.out.println(
+			new Barcode("00000").compareTo(new Barcode("11111")));
+		System.out.println(
+			new Barcode("44444").compareTo(new Barcode("44444")));
+		
+		
+		
+		/*
 		System.out.println(toCode("08451")
-			/*(.equals("|||:::|::|::|::|:|:|::::|||::|:|")*/);
-		System.out.println("|||:::|::|::|::|:|:|::::|||::|:|");
-		/*System.out.println(b.compareTo(c));
-		System.out.println(c.compareTo(b));
-		System.out.println(c.compareTo(c));*/
+			.equals("|||:::|::|::|::|:|:|::::|||::|:|"));
+		System.out.println(toZip("|||:::|::|::|::|:|:|::::|||::|:|")
+			.equals("08451"));
+		*/
+		//fail cases
+		//System.out.println(toZip("|||:::|::|::|::|:|:|::::|||::|:||"));
+		//System.out.println(toZip("|||:::|::|:::::|:|:|::::|||::|:|"));
+		//System.out.println(toZip("||:|::|::|::|::|:|:|::::|||::|:|"));
+		//System.out.println(toZip("|||:::|::|::|::|:|:|::::|||:::||"));
+		//System.out.println(toZip("|||:::|::|::|::|:|:|::::|||:|:|"));
+		//System.out.println(toZip("|||:::|::|::|:boop|:|:|::::|||::|:|"));
+		
+		
+		System.out.println("toZip and toCode");
+		String a = "01234";
+		String b = "56789";
+		System.out.println(toZip(toCode(a)).equals(a));
+		System.out.println(toZip(toCode(b)).equals(b));
+		
 	}
 }

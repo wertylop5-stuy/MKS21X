@@ -6,25 +6,32 @@ public class Sorts {
      *@param the array to be sorted
      */
     public static void selectionSort(int[] data) {
-	int temp = 0;
-	//int sortedIndex = 0;
 	int smallestIndex = 0;
-	int smallestNum = Integer.MAX_VALUE;
-	//	while (sortedIndex < data.length) {
+	//int smallestNum = Integer.MAX_VALUE;
         for (int sortedIndex = 0; sortedIndex < data.length; sortedIndex++) {
-	    smallestNum = Integer.MAX_VALUE;
+	    smallestIndex = sortedIndex;
+	    
 	    //Selects the smallest non-sorted number
 	    for (int counter = sortedIndex; counter < data.length; counter++) {
-		if (data[counter] < smallestNum) {
+		if (data[counter] < data[smallestIndex]) {
 		    smallestIndex = counter;
-		    smallestNum = data[counter];
 		}
 	    }
+	    
 	    //Swap integers
-	    temp = data[sortedIndex];
-	    data[sortedIndex] = data[smallestIndex];
-	    data[smallestIndex] = temp;
+	    swap(data, sortedIndex, smallestIndex);
 	}
+    }
+    
+    
+    public static void insertionSort(int[] data) {
+	
+    }
+    
+    private static void swap(int[] data, int i, int j) {
+	int temp = data[i];
+	data[i] = data[j];
+	data[j] = temp;
     }
     
     public static void main(String[] args) {

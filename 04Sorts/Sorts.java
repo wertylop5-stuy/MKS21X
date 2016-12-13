@@ -7,7 +7,6 @@ public class Sorts {
      */
     public static void selectionSort(int[] data) {
 	int smallestIndex = 0;
-	//int smallestNum = Integer.MAX_VALUE;
         for (int sortedIndex = 0; sortedIndex < data.length; sortedIndex++) {
 	    smallestIndex = sortedIndex;
 	    
@@ -25,7 +24,11 @@ public class Sorts {
     
     
     public static void insertionSort(int[] data) {
+	int j = 1;
 	
+	for (int i = 0; i < data.length - 1; i++) {
+	    
+	}
     }
     
     private static void swap(int[] data, int i, int j) {

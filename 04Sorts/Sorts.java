@@ -1,3 +1,4 @@
+import java.util.Arrays;
 public class Sorts {
     public static String name(){ return "06.Lin.Stanley"; }
     
@@ -24,10 +25,22 @@ public class Sorts {
     
     
     public static void insertionSort(int[] data) {
-	int j = 1;
+	int temp = 0;
+	int j = 0;
 	
-	for (int i = 0; i < data.length - 1; i++) {
-	    
+	//Go thru all elements
+	for (int i = 1; i < data.length; i++) {
+	    System.out.println("current: " + data[i] + " " + i);
+	    if (data[i] < data[i-1]) {
+		System.out.println("from " + data[i] + " to " + i);
+		temp = data[i];
+		j = i;
+		while (j > 0 && data[j] < data[j-1]) {
+		    data[j] = data[j-1];
+		    j--;
+		}
+		data[j] = temp;
+	    }
 	}
     }
     
@@ -36,10 +49,26 @@ public class Sorts {
 	data[i] = data[j];
 	data[j] = temp;
     }
+
+    private static void resetArrays(int[] master, int[] a, int[] b) {
+	System.arraycopy(master, 0, a, 0, a.length);
+	System.arraycopy(master, 0, b, 0, b.length);
+    }
     
     public static void main(String[] args) {
 	int[] a = {1, 0, -1, 45, 21, 6};
-	selectionSort(a);
-	for (int x : a) System.out.println(x);
+	int[] b = {0, 1, 1, 2, 3, 4};
+	int[] ans = {1, 2, 3, 4, 5, 6};
+	resetArrays(a, b, ans);
+	
+	Arrays.sort(ans);
+	selectionSort(b);
+	System.out.println(Arrays.equals(b, ans));
+	
+	resetArrays(a, b, ans);
+	Arrays.sort(ans);
+	insertionSort(b);
+	System.out.println(Arrays.equals(b, ans));
+	for (int x:b) System.out.println(x);
     }
 }

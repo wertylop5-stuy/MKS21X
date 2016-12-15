@@ -28,21 +28,11 @@ public class Sorts {
 		int temp = 0;
 		int j = 0;
 		
-		//Go thru all elems
-		//Is the current less than the previous?
-			//save current val
-			//is current less than previous
-				//change index
-			//set current index to temp
-		
-		
 		//Go thru all elements
 		for (int i = 1; i < data.length; i++) {
-			//System.out.println("current: " + data[i] + " " + i);
 			
 			//Is the current less than the previous?
 			if (data[i] < data[i-1]) {
-				//System.out.println("compare " + data[i] + " to " + data[i-1]);
 				
 				//save current val
 				temp = data[i];
@@ -50,12 +40,11 @@ public class Sorts {
 				
 				//is current less than previous
 				while (j > 0 && temp < data[j-1]) {
-					//System.out.println("moving index " + (j-1) + " to " + j);
 					data[j] = data[j-1];
+					
 					//change index
 					j--;
 				}
-				//System.out.println(j > 0 && data[j] < data[j-1]);
 				data[j] = temp;
 			}
 		}
